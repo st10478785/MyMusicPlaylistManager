@@ -34,7 +34,7 @@
         android:layout_width="133dp"
         android:layout_height="51dp"
         android:layout_marginStart="25dp"
-        android:layout_marginBottom="670dp"
+        android:layout_marginBottom="650dp"
         android:text="Vishay Gosai                                ST10478785"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -126,17 +126,21 @@
             android:padding="10dp" />
 
         <TextView
-            android:id="@+id/txtQuantity"
+            android:id="@+id/txtRatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:text="Rateing:"
             android:textSize="16sp" />
 
-        <RatingBar
+        <EditText
             android:id="@+id/edtRatingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:hint="Please enter a rating (e.g. 1 - 5 ) "
+            android:inputType="number"
+            android:padding="10dp" />
 
         <TextView
             android:id="@+id/txtComments"
@@ -156,7 +160,7 @@
             android:padding="10dp" />
 
         <Button
-            android:id="@+id/btnAddItem"
+            android:id="@+id/btnAddPlaylist1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Playlist" />

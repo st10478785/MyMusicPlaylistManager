@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     // Arrays to store Song details
     private val songTitle = mutableListOf<String>()
     private val artistsName = mutableListOf<String>()
-    private val ratingBar = mutableListOf<Float>()
+    private val ratingBar = mutableListOf<Int>()
     private val comments = mutableListOf<String>()
 
     @SuppressLint("MissingInflatedId")
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         val edtSongTitle = findViewById<EditText>(R.id.edtSongTitle)
         val edtArtistsName = findViewById<EditText>(R.id.edtArtistsName)
-        val edtRatingBar = findViewById<RatingBar>(R.id.edtRatingBar)
+        val edtRatingBar = findViewById<EditText>(R.id.edtRatingBar)
         val edtComments = findViewById<EditText>(R.id.edtComments)
         val btnAddPlaylist1 = findViewById<Button>(R.id.btnAddPlaylist1)
         val btnNext = findViewById<Button>(R.id.btnNext)
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         btnAddPlaylist1.setOnClickListener {
             val songTitle = edtSongTitle.text.toString()
             val artistsName = edtArtistsName.text.toString()
-            val ratingBar = edtRatingBar.rating.toString()
+            val ratingBar = edtRatingBar.text.toString()
             val comment = edtComments.text.toString()
 
             try {
@@ -91,8 +91,7 @@ class MainActivity : AppCompatActivity() {
                 // Clear input fields
                 edtSongTitle.text.clear()
                 edtArtistsName.text.clear()
-                // edtRatingBar.rating.clear()                not working
-                edtRatingBar.rating = 0f
+                edtRatingBar.text.clear()
                 edtComments.text.clear()
 
                 // Error Handling
@@ -127,8 +126,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, DetailedViewScreenActivity::class.java)
                 intent.putStringArrayListExtra("Song Title", ArrayList(songTitle))
                 intent.putStringArrayListExtra("Artist's Name", ArrayList(artistsName))
-                // Please add ratingBar
-                intent.putFloatArrayListExtra("Rating", ArrayList(ratingBar))
+                intent.putIntegerArrayListExtra("Rating Bar", ArrayList(ratingBar))
                 intent.putStringArrayListExtra("Comments", ArrayList(comments))
                 startActivity(intent)
             }
@@ -139,11 +137,8 @@ class MainActivity : AppCompatActivity() {
     private fun addItem(songTitle: String, artistsName: String, ratingBar: Int, comment: String) {
         this.songTitle.add(songTitle)
         this.artistsName.add(artistsName)
-        this.ratingBar.add(ratingBar.toFloat())
+        this.ratingBar.add(ratingBar)
         comments.add(comment)
     }
 }
 
-private fun Any.putFloatArrayListExtra(s: String, arrayList: ArrayList<Float>) {
-
-}
