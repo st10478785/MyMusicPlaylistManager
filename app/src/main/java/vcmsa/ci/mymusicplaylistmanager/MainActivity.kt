@@ -63,11 +63,7 @@ class MainActivity : AppCompatActivity() {
         btnExit.setOnClickListener {
             finishAffinity()
         }
-        // Button View to next page
-        btnView.setOnClickListener {
-            val intent = Intent(this, DetailedViewScreenActivity::class.java)
-            startActivity(intent)
-        }
+
 
         // Add Playlist Button Click Listener
         btnAddPlaylist1.setOnClickListener {
@@ -131,7 +127,13 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+        // Button View to next page
+        btnView.setOnClickListener {
+            val intent = Intent(this, DetailedViewScreenActivity::class.java)
+            startActivity(intent)
+        }
     }
+
 
     // Function to add item details to parallel arrays
     private fun addItem(songTitle: String, artistsName: String, ratingBar: Int, comment: String) {

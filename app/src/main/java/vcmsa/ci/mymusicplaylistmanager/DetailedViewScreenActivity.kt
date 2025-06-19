@@ -1,15 +1,16 @@
 package vcmsa.ci.mymusicplaylistmanager
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+
 
 class DetailedViewScreenActivity : AppCompatActivity() {
 
@@ -19,67 +20,82 @@ class DetailedViewScreenActivity : AppCompatActivity() {
     private var ratingBar = mutableListOf<Int>()
     private var comments = mutableListOf<String>()
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_detailed_view_screen)
 
         // UI Elements
+        val txtAnswer = findViewById<TextView>(R.id.txtAnswer)
         val listView = findViewById<ListView>(R.id.ListView)
+        val txtAnswer2 = findViewById<TextView>(R.id.txtAnswer2)
         val btnShowAll = findViewById<Button>(R.id.btnShowAll)
         val btnCalculate = findViewById<Button>(R.id.btnCalculate)
         val btnBackToMain = findViewById<Button>(R.id.btnBackToMain)
 
-        // Retrieve data passed from MainActivity (if available)
-        songTitle = intent.getStringArrayListExtra("Song Title")?.toMutableList() ?: mutableListOf()
-        artistsName = intent.getStringArrayListExtra("Artist's Name")?.toMutableList() ?: mutableListOf()
-        ratingBar = intent.getIntegerArrayListExtra("Rating Bar")?.toMutableList() ?: mutableListOf()
-        comments = intent.getStringArrayListExtra("comments")?.toMutableList() ?: mutableListOf()
+        // Retrive data from MainActivity
+        songTitle = intent.getStringArrayListExtra("Song Title") as MutableList<String>
+        artistsName = intent.getStringArrayListExtra("Artist's Name") as MutableList<String>
+        ratingBar = intent.getIntegerArrayListExtra("Rating Bar") as MutableList<Int>
+        comments = intent.getStringArrayListExtra("Comments") as MutableList<String>
 
-        // Show all items when "Show All Items" is clicked
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, songTitle)
+        listView.adapter = adapter
+
+        // btnShowAll to display the data in the ListView
+        // diplay the  grouped data : songTitle , artistsName , ratingBar , comments
         btnShowAll.setOnClickListener {
-            displayItems(listView, "all")
+
+           displayPlaylist(listView, songTitle.toString(), artistsName, ratingBar, comments)
+
         }
 
-        // Show Songs Ratings when "Calculate" is clicked
+        // btnCalculate to calculate the average rating
+        // display the average rating in the txtAnswer
         btnCalculate.setOnClickListener {
-            displayItems(listView, "Rating")
+            var sum = 0
+            for (i in ratingBar) {
+                sum += i
+            }
+            val average = sum / ratingBar.size
+            txtAnswer2.text = "The average rating is $average"
+
         }
 
-        // Handle "Back to Main" button click (close the activity)
+        // btnBackToMain to go back to MainActivity
         btnBackToMain.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+
         }
+
+
     }
 
-    // Function to display the items in the ListView
-    private fun displayItems(listView: ListView, filter: String) {
-        val displayList = mutableListOf<String>()
+    private fun displayPlaylist(
+        listView: ListView,
+        filter: String,
+        artistsName: MutableList<String>,
+        ratingBar: MutableList<Int>,
+        comments: MutableList<String>
+    ) {
+        val displayList = mutableListOf<String>() // List to hold the items to display
 
         try {
             // Loop through the arrays and add items to the display list based on the filter
             for (i in songTitle.indices) {
-                val itemDetails = "Songe Title: ${songTitle[i]}\n" +
-                        "Artist's Name: ${artistsName[i]}\n" +
-                        "Rating Bar: ${ratingBar[i]}\n" +
-                        "Comments: ${comments[i]}"
-
-                if (filter == "all" || (filter == "Ratings" && ratingBar[i] >= 2)) {
-                    displayList.add(itemDetails)
-                }
+                val itemDetails = "Name: ${songTitle[i]}\n" +
+                        "Category: ${this.artistsName[i]}\n" +
+                        "Quantity: ${this.ratingBar[i]}\n" +
+                        "Comments: ${this.comments[i]}"
+                displayList.add(itemDetails)
             }
-
-            // Check if the displayList is empty
-            if (displayList.isEmpty()) {
-                Toast.makeText(this, "No playlist to display!", Toast.LENGTH_SHORT).show()
-            } else {
-                // Display the items in the ListView using an ArrayAdapter
-                val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, displayList)
-                listView.adapter = adapter
-            }
+            // Create an ArrayAdapter to display the items in the ListView
+            val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, displayList)
+            listView.adapter = adapter
         } catch (e: Exception) {
-            Toast.makeText(this, "An error occurred: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 }
